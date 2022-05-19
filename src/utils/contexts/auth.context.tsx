@@ -1,28 +1,30 @@
-import React, { createContext, useEffect } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AuthContextType = {
   user: any;
   isAuth: boolean;
   setUser: (obj: any) => void;
+  logout: () => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   isAuth: null,
-  setUser: () => null,
+  setUser: (obj) => null,
+  logout: () => null,
 });
 
 const AuthProvider: React.FC = ({ children }) => {
-  const [user, setUser] = React.useState<any | null>(null);
-  const [isAuth, setIsAuth] = React.useState<boolean>(false);
+  const [user, setUser] = useState<any | null>(false);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
     const getUser = async () => {
       try {
-        const user = await AsyncStorage.getItem("user");
-        setUser(JSON.parse(user));
-        setIsAuth(true);
+        // const user = await AsyncStorage.getItem("user");
+        // if (user) return setUser(JSON.parse(user));
+        logout();
       } catch (error) {
         setUser(null);
       }
@@ -34,11 +36,30 @@ const AuthProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (!user) return setIsAuth(false);
 
-    setIsAuth(true);
+    const saveUser = async () => {
+      try {
+        await AsyncStorage.setItem("user", JSON.stringify(user));
+        setIsAuth(true);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
+    saveUser();
   }, [user]);
 
+  const logout = useCallback(async () => {
+    try {
+      await AsyncStorage.removeItem("user");
+    } catch (error) {
+    } finally {
+      setUser(null);
+      setIsAuth(false);
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user, setUser, isAuth }}>
+    <AuthContext.Provider value={{ user, setUser, isAuth, logout }}>
       {children}
     </AuthContext.Provider>
   );
