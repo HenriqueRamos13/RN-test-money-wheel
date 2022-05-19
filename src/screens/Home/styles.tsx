@@ -1,7 +1,9 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    padding: 16,
+  },
 });
 
 export { styles };
