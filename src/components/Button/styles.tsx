@@ -9,7 +9,6 @@ const styles = {
     },
     text: {
       color: "#666",
-      marginTop: 10,
     },
   }),
 
@@ -21,6 +20,7 @@ const styles = {
       borderRadius: 5,
       justifyContent: "center",
       alignItems: "center",
+      marginBottom: 10,
     },
     text: {
       color: "#fff",
