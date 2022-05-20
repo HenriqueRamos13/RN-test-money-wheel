@@ -51,6 +51,7 @@ const AuthProvider: React.FC = ({ children }) => {
   const logout = useCallback(async () => {
     try {
       await AsyncStorage.removeItem("user");
+      await AsyncStorage.removeItem("@lastSpinDate");
     } catch (error) {
     } finally {
       setUser(null);

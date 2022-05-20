@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { styles } from "./styles";
@@ -21,6 +21,13 @@ const FirstForm = ({ nextStep, text }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const verify = () => {
+    if (email?.trim()?.length === 0 || password?.trim()?.length === 0)
+      return Alert.alert("Empty fields", "Please fill all the fields");
+
+    nextStep();
+  };
+
   return (
     <>
       <InfoText text={text} />
@@ -36,13 +43,20 @@ const FirstForm = ({ nextStep, text }) => {
         onChangeText={(v) => setPassword(v)}
         value={password}
       />
-      <Button title="Send Code" onPress={nextStep} />
+      <Button title="Send Code" onPress={verify} />
     </>
   );
 };
 
 const SecondForm = ({ nextStep, text }) => {
   const [code, setCode] = useState("");
+
+  const verify = () => {
+    if (code?.trim()?.length === 0)
+      return Alert.alert("Empty fields", "Please fill all the fields");
+
+    nextStep();
+  };
 
   return (
     <>
@@ -53,14 +67,12 @@ const SecondForm = ({ nextStep, text }) => {
         onChangeText={(v) => setCode(v)}
         value={code}
       />
-      <Button title="Finish" onPress={nextStep} />
+      <Button title="Finish" onPress={verify} />
     </>
   );
 };
 
 export default function Recovery({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [step, setStep] = useState(0);
 
   const recovery = () => goToScreen("Login");

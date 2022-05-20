@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { styles } from "./styles";
@@ -10,7 +10,12 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const { setUser } = useContext(AuthContext);
 
-  const signIn = () => setUser({ email });
+  const signIn = () => {
+    if (email?.trim()?.length === 0 || password?.trim()?.length === 0)
+      return Alert.alert("Empty fields", "Please fill all the fields");
+
+    setUser({ email, password });
+  };
 
   const goToScreen = (s) => navigation.navigate(s);
 

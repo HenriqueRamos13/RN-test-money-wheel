@@ -5,7 +5,7 @@ import { styles } from "./styles";
 type Props = {
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
-  placeholder: string;
+  placeholder?: string;
   value: string;
   onChangeText: (text: string) => void;
 };
